@@ -7,15 +7,19 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class NotesTVC: UITableViewController {
     
     var notes: [Note] = []
     
+    let appDelegate = UIApplication.shared.delegate as? AppDelegate
+    
     @IBAction func saveNote(_ sender: UIBarButtonItem) {
         let alert = UIAlertController(title: "New Note", message: "enter new note", preferredStyle: .alert)
         
         let save = UIAlertAction(title: "Save", style: .cancel) { action in
+            self.appDelegate?.scaduleNotification(notificationType: "Don't forget about your list")
             let tf = alert.textFields?.first
             if let newNoteTitle = tf?.text {
                 self.saveNote(withTitle: newNoteTitle)
@@ -78,10 +82,6 @@ class NotesTVC: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return notes.count
     }
@@ -109,6 +109,4 @@ class NotesTVC: UITableViewController {
         action.image = UIImage(systemName: "trash")
         return action
     }
-    
-
 }
